@@ -1,0 +1,100 @@
+{
+  "storyboard": {
+    "title": "Clear team handovers",
+    "duration_seconds": 30,
+    "audience": "Project teams",
+    "tone": "professional",
+    "main_content_seconds": 27,
+    "scene_count": 4,
+    "slide_text_instructions": {
+      "writer": "Gemma",
+      "tone": "strictly professional",
+      "detail": "Write informative headings and readable supporting text.",
+      "top_right_header": "Use a phrase or short sentence. Reuse it across related scenes.",
+      "logo_clearance": "Keep the header within its allocated space beside the Savvy Asia logo."
+    },
+    "scenes": [
+      {
+        "scene": 1,
+        "target_seconds": 6,
+        "purpose": "Record the current status",
+        "key_points": [
+          "Completed work",
+          "Outstanding tasks"
+        ],
+        "narration": "Record completed work and outstanding tasks so the incoming team can see the current position.",
+        "slide_text_guidance": "Explain these points in professional language.",
+        "top_right_header_guidance": "Choose a section heading, reusing a related header where suitable."
+      },
+      {
+        "scene": 2,
+        "target_seconds": 7,
+        "purpose": "Share supporting documents",
+        "key_points": [
+          "Latest approved versions",
+          "A shared document location"
+        ],
+        "narration": "Share the latest approved documents in one accessible location and confirm that the incoming team can open them.",
+        "slide_text_guidance": "Explain these points in professional language.",
+        "top_right_header_guidance": "Choose a section heading, reusing a related header where suitable."
+      },
+      {
+        "scene": 3,
+        "target_seconds": 7,
+        "purpose": "Explain unresolved issues",
+        "key_points": [
+          "Pending decisions",
+          "Named owners"
+        ],
+        "narration": "Explain each unresolved issue, record the decision required, and identify who will take responsibility for resolving it.",
+        "slide_text_guidance": "Explain these points in professional language.",
+        "top_right_header_guidance": "Choose a section heading, reusing a related header where suitable."
+      },
+      {
+        "scene": 4,
+        "target_seconds": 7,
+        "purpose": "Agree the next action",
+        "key_points": [
+          "Action owner",
+          "Follow-up date"
+        ],
+        "narration": "Agree the next action, name its owner, and record a follow-up date to keep the handover moving.",
+        "slide_text_guidance": "Explain these points in professional language.",
+        "top_right_header_guidance": "Choose a section heading, reusing a related header where suitable."
+      }
+    ],
+    "closing": {
+      "duration_seconds": 3,
+      "narration": "Connect to Savvy Asia."
+    }
+  },
+  "output": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30
+  },
+  "voice": {
+    "name": "en-US-BrianNeural",
+    "tone": "professional"
+  },
+  "brand": {
+    "company_name": "Savvy Asia",
+    "logo_file_field": "company_logo"
+  },
+  "background": {
+    "file_field": "background_video",
+    "fit": "cover",
+    "loop": true
+  },
+  "scene_media": [
+    {
+      "scene": 2,
+      "file_field": "scene_2_media",
+      "fit": "contain",
+      "motion": "none"
+    }
+  ],
+  "closing_slide": {
+    "file_field": "closing_slide"
+  }
+}

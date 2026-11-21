@@ -1,0 +1,36 @@
+{
+  "prompt": "Create a 60-second explainer about clear team handovers. Explain the current status, supporting documents, unresolved issues and the next action.",
+  "duration_seconds": 60,
+  "output": {
+    "fps": 30,
+    "width": 1920,
+    "height": 1080
+  },
+  "voice": {
+    "name": "en-US-BrianNeural",
+    "tone": "professional"
+  },
+  "brand": {
+    "company_name": "Savvy Asia",
+    "logo_file_field": "company_logo"
+  },
+  "background": {
+    "file_field": "background_video",
+    "fit": "cover",
+    "loop": true
+  },
+  "scene_media": [
+    {
+      "scene": 2,
+      "file_field": "scene_2_media",
+      "fit": "contain",
+      "motion": "none"
+    }
+  ],
+  "closing_slide": {
+    "file_field": "closing_slide",
+    "duration_seconds": 3,
+    "display": "original",
+    "narration": "Connect to Savvy Asia."
+  }
+}

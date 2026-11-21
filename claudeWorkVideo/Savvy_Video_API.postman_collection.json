@@ -1,0 +1,227 @@
+{
+  "info": {
+    "name": "Savvy Video API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Import this collection. Set base_url and api_token from the Colab tunnel cell. Direct media uploads use form-data: config is Text; matching named uploads are File. The job ID is captured automatically. Read GET /options for descriptions and defaults. Save the download response as MP4.",
+    "version": "1.1.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{api_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    },
+    {
+      "key": "api_token",
+      "value": "PASTE_THE_TOKEN_PRINTED_IN_COLAB",
+      "type": "string"
+    },
+    {
+      "key": "job_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/health",
+        "description": "",
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "Options — defaults and descriptions",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/options",
+        "description": ""
+      }
+    },
+    {
+      "name": "Configuration schema",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/schema",
+        "description": ""
+      }
+    },
+    {
+      "name": "Available English voices",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/voices?locale=en-US",
+        "description": ""
+      }
+    },
+    {
+      "name": "Create video — prompt only",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{base_url}}/jobs",
+        "description": "",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "config",
+              "value": "{\n  \"prompt\": \"Create a 30-second explainer about clear team handovers. Cover status, supporting documents and agreeing the next action.\",\n  \"output\": {\n    \"width\": 960,\n    \"height\": 540,\n    \"fps\": 20\n  },\n  \"voice\": {\n    \"name\": \"en-US-BrianNeural\",\n    \"tone\": \"professional\"\n  }\n}",
+              "type": "text",
+              "description": "JSON Text. Example overrides defaults for a faster first 960x540 preview; omit settings to use documented defaults."
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Job accepted\", function () { pm.response.to.have.status(202); });",
+              "if (pm.response.code === 202) {",
+              "  pm.collectionVariables.set(\"job_id\", pm.response.json().job_id);",
+              "  console.log(\"Job ID:\", pm.response.json().job_id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create video — supplied storyboard",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{base_url}}/jobs",
+        "description": "Paste the larger LLM JSON into config.storyboard. Gemma writes slide copy and headers. In Body → form-data, select a file in each File row you use. If skipping an upload, uncheck its File row and remove the matching reference from config. The company logo and closing artwork have bundled defaults. Match the scene number in scene_media to your storyboard. Let Postman set Content-Type.",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "config",
+              "value": "{\n  \"storyboard\": {\n    \"title\": \"Clear team handovers\",\n    \"duration_seconds\": 30,\n    \"audience\": \"Project teams\",\n    \"tone\": \"professional\",\n    \"main_content_seconds\": 27,\n    \"scene_count\": 4,\n    \"slide_text_instructions\": {\n      \"writer\": \"Gemma\",\n      \"tone\": \"strictly professional\",\n      \"detail\": \"Write informative headings and readable supporting text.\",\n      \"top_right_header\": \"Use a phrase or short sentence. Reuse it across related scenes.\",\n      \"logo_clearance\": \"Keep the header within its allocated space beside the Savvy Asia logo.\"\n    },\n    \"scenes\": [\n      {\n        \"scene\": 1,\n        \"target_seconds\": 6,\n        \"purpose\": \"Record the current status\",\n        \"key_points\": [\n          \"Completed work\",\n          \"Outstanding tasks\"\n        ],\n        \"narration\": \"Record completed work and outstanding tasks so the incoming team can see the current position.\",\n        \"slide_text_guidance\": \"Explain these points in professional language.\",\n        \"top_right_header_guidance\": \"Choose a section heading, reusing a related header where suitable.\"\n      },\n      {\n        \"scene\": 2,\n        \"target_seconds\": 7,\n        \"purpose\": \"Share supporting documents\",\n        \"key_points\": [\n          \"Latest approved versions\",\n          \"A shared document location\"\n        ],\n        \"narration\": \"Share the latest approved documents in one accessible location and confirm that the incoming team can open them.\",\n        \"slide_text_guidance\": \"Explain these points in professional language.\",\n        \"top_right_header_guidance\": \"Choose a section heading, reusing a related header where suitable.\"\n      },\n      {\n        \"scene\": 3,\n        \"target_seconds\": 7,\n        \"purpose\": \"Explain unresolved issues\",\n        \"key_points\": [\n          \"Pending decisions\",\n          \"Named owners\"\n        ],\n        \"narration\": \"Explain each unresolved issue, record the decision required, and identify who will take responsibility for resolving it.\",\n        \"slide_text_guidance\": \"Explain these points in professional language.\",\n        \"top_right_header_guidance\": \"Choose a section heading, reusing a related header where suitable.\"\n      },\n      {\n        \"scene\": 4,\n        \"target_seconds\": 7,\n        \"purpose\": \"Agree the next action\",\n        \"key_points\": [\n          \"Action owner\",\n          \"Follow-up date\"\n        ],\n        \"narration\": \"Agree the next action, name its owner, and record a follow-up date to keep the handover moving.\",\n        \"slide_text_guidance\": \"Explain these points in professional language.\",\n        \"top_right_header_guidance\": \"Choose a section heading, reusing a related header where suitable.\"\n      }\n    ],\n    \"closing\": {\n      \"duration_seconds\": 3,\n      \"narration\": \"Connect to Savvy Asia.\"\n    }\n  },\n  \"output\": {\n    \"width\": 1920,\n    \"height\": 1080,\n    \"fps\": 30\n  },\n  \"voice\": {\n    \"name\": \"en-US-BrianNeural\",\n    \"tone\": \"professional\"\n  },\n  \"brand\": {\n    \"company_name\": \"Savvy Asia\",\n    \"logo_file_field\": \"company_logo\"\n  },\n  \"background\": {\n    \"file_field\": \"background_video\",\n    \"fit\": \"cover\",\n    \"loop\": true\n  },\n  \"scene_media\": [\n    {\n      \"scene\": 2,\n      \"file_field\": \"scene_2_media\",\n      \"fit\": \"contain\",\n      \"motion\": \"none\"\n    }\n  ],\n  \"closing_slide\": {\n    \"file_field\": \"closing_slide\"\n  }\n}",
+              "type": "text",
+              "description": "Paste the narration plan under storyboard. Keep each file_field equal to its matching File row."
+            },
+            {
+              "key": "company_logo",
+              "type": "file",
+              "src": null,
+              "description": "Select your company logo image (PNG/JPEG)."
+            },
+            {
+              "key": "background_video",
+              "type": "file",
+              "src": null,
+              "description": "Select your actual background video file."
+            },
+            {
+              "key": "scene_2_media",
+              "type": "file",
+              "src": null,
+              "description": "Select an image, GIF, or video for scene 2. Update both the JSON scene assignment and the row key when you change the file field name."
+            },
+            {
+              "key": "closing_slide",
+              "type": "file",
+              "src": null,
+              "description": "Select static JPG, PNG, or WebP artwork. Timing and narration come from storyboard.closing."
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Job accepted\", function () { pm.response.to.have.status(202); });",
+              "if (pm.response.code === 202) {",
+              "  pm.collectionVariables.set(\"job_id\", pm.response.json().job_id);",
+              "  console.log(\"Job ID:\", pm.response.json().job_id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Recent jobs",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/jobs",
+        "description": ""
+      }
+    },
+    {
+      "name": "Job status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/jobs/{{job_id}}",
+        "description": ""
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Job found\", function () { pm.response.to.have.status(200); });",
+              "console.log(pm.response.json());"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Timing and quality report",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/jobs/{{job_id}}/report",
+        "description": ""
+      }
+    },
+    {
+      "name": "Job debug log",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/jobs/{{job_id}}/log",
+        "description": ""
+      }
+    },
+    {
+      "name": "Download video",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/jobs/{{job_id}}/video",
+        "description": "Wait for completed status, then send and save this response as an .mp4 file. Authentication is inherited from the collection."
+      }
+    }
+  ]
+}
