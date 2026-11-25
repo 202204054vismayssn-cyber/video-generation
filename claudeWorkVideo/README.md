@@ -1,26 +1,40 @@
-# Colab Video API 1.3 — Postman + Cloudflare Tunnel
+# Video Studio — Colab + Cloudflare
 
-This package runs your existing video-generation pipeline behind an authenticated
-FastAPI service. Gemma2:2b runs locally through Ollama. Edge TTS remains an online
-service. FFmpeg performs encoding; source-video audio is discarded.
-The existing frame renderer and H.264 encoder run on the CPU. A Colab GPU can
-accelerate local Ollama inference when Ollama detects and uses it.
+Video Studio is a browser interface for the existing FastAPI job service. Colab runs
+Gemma2:2b through Ollama and renders with FFmpeg. Edge TTS provides online narration.
+A GPU can accelerate Ollama inference. The existing frame renderer and encoder use the CPU.
 
-## Start in Colab
+## Run in your browser
 
-1. Upload/open `colab_postman_video_api.ipynb` and select a T4 GPU runtime.
-2. Run notebook Cells 1–4 in order. In Cell 3, select the updated `video_api_source.zip`
-   from the project folder. Model preparation is the largest first-run download.
-3. Run Cell 5 to start the API, then Cell 6 to start Cloudflare Tunnel.
-4. Import `Savvy_Video_API.postman_collection.json` into Postman.
-5. In the collection variables, paste `base_url` and `api_token` printed by Cell 6.
-6. Send **Health**, **Options**, then **Create video — prompt only**.
-7. Send **Job status** until status is `completed`. The create request fills `job_id` automatically.
-8. Send **Download video** and save the response as an `.mp4` file.
+1. Open `colab_postman_video_api.ipynb` in Colab and select a T4 GPU runtime.
+2. Run Cells 1–4. In Cell 3, upload the updated `video_api_source.zip` from this project.
+3. Run Cell 5 to start the API and Cell 6 to start the Cloudflare tunnel.
+4. Open the **Video Studio** link from Cell 6. Its Cloudflare URL is already filled in.
+   Paste the printed `api_token` into **Colab API token**, then select **Connect**.
+5. Enter a brief and choose your output settings. Add files from your computer for
+   any shared background, logo, closing artwork, background music, or scene media.
+6. Select **Generate video**. Watch the stages, inspect the log or report, and
+   preview or download the finished MP4 from **Render jobs**.
 
-The notebook's Download tools cell downloads the collection and the full readable
-Python source package. No other notebook, uploaded Python file or paid model key is
-required. An application Bearer token is generated to protect your own API.
+The API token is held in the tab. The connection uses the generated `api_token`
+from Cell 6. The optional Cloudflare connector token in Cell 2 configures the tunnel.
+
+### Open Studio locally
+
+From this project folder, run `python -m http.server 8765 --bind 127.0.0.1 --directory studio`.
+Open `http://127.0.0.1:8765/`, paste both `base_url` and `api_token` from Cell 6,
+and select **Connect**. Colab still handles uploads, inference, and rendering.
+
+### Use a supplied storyboard
+
+Choose **Storyboard** and paste the JSON from your writing assistant. Studio also
+accepts an object wrapped in a `storyboard` key. Choose output settings and attach
+media using the form. Choose **Prompt** to generate from a plain-language brief.
+
+### Optional Postman workflow
+
+The collection remains in the source ZIP and is available from Cell 7.
+Set its `base_url` and `api_token` from Cell 6 if you use it.
 
 ## Use a storyboard from a larger LLM
 

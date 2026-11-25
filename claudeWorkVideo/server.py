@@ -21,8 +21,10 @@ from typing import Annotated
 
 import edge_tts
 from fastapi import Depends, FastAPI, HTTPException, Request, Security
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.staticfiles import StaticFiles
 from pydantic import ValidationError
 from starlette.datastructures import UploadFile
 
@@ -191,6 +193,15 @@ app = FastAPI(
 )
 AUTH = [Depends(authenticate)]
 
+# The tunnel-hosted studio uses the same origin. Allow a locally served studio too.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origin_regex=r"http://(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?",
+    allow_methods=["GET", "POST"],
+    allow_headers=["Authorization", "Content-Type"],
+)
+app.mount("/studio", StaticFiles(directory=PACKAGE / "studio", html=True), name="studio")
+
 
 @app.get("/health", tags=["Service"])
 def health():
@@ -302,14 +313,14 @@ async def create_job(request: Request):
     if "multipart/form-data" not in request.headers.get("content-type", "").lower():
         raise HTTPException(
             415,
-            "Use Body → form-data: config as Text, media as File. Let Postman set Content-Type.",
+            "Send multipart/form-data with config as JSON text and media as files.",
         )
     try:
         length = int(request.headers["content-length"])
     except (KeyError, ValueError):
         raise HTTPException(
             411,
-            "Send a Content-Length header; Postman sets it automatically for form-data files.",
+            "The multipart request must include a Content-Length header.",
         )
     if not 0 < length <= MAX_UPLOAD_BYTES:
         raise HTTPException(

@@ -1,0 +1,71 @@
+Create a structured video narration plan from the following input.
+
+Video brief: [Describe the video.]
+Audience: [Who will watch it?]
+Total duration in seconds: [Enter 15–600.]
+Closing duration in seconds: [Enter 0 to disable, or 1–30.]
+Closing narration: [Enter the message, or leave empty for silence.]
+Required facts and wording: [Provide facts, names, dates, figures and exact phrases.]
+
+Use strictly professional English. Preserve the supplied facts. Avoid filler,
+invented specifics and unresolved placeholders.
+
+Choose a dynamic number of main scenes based on the duration and content, from
+1 to 40. Every scene must explain a coherent point. Allow enough time for
+comfortable speech and reading. Use at least 1.6 seconds per scene and at least
+9 seconds of main content.
+
+Subtract closing duration from total duration to obtain main_content_seconds.
+Assign target_seconds to each scene so their sum equals main_content_seconds.
+Start scene numbers at 1. Set scene_count to the actual number of scenes.
+
+Write natural narration for the topic and audience in the brief. Before returning
+the storyboard, read each scene as spoken and shorten it to fit its target time.
+Remove repetition and simplify sentences while preserving the intent, required
+facts and any wording the brief asks to keep. Use slide text for supporting
+details when appropriate. About two spoken words per second is a drafting guide.
+Aim for the requested total, including the closing. The final rendered video
+has a single tolerance of plus or minus three seconds across the whole video.
+
+For each scene provide a purpose, key_points, exact narration, slide_text_guidance
+and top_right_header_guidance. Gemma will write the final slide heading,
+description, supporting text and top-right header from these inputs.
+The header can be a phrase or short sentence. It may repeat across related
+slides or vary as the subject changes. The renderer reserves a separate header
+area with clearance from the Savvy Asia logo.
+
+Return valid JSON only, without Markdown. Use exactly the structure below.
+Replace all sample values, including zeros, using the actual input. Include
+one scene object for every scene. Use an empty closing narration when its
+duration is zero.
+
+{
+  "title": "Working title",
+  "duration_seconds": 0,
+  "audience": "Intended viewers",
+  "tone": "professional",
+  "main_content_seconds": 0,
+  "scene_count": 0,
+  "slide_text_instructions": {
+    "writer": "Gemma",
+    "tone": "strictly professional",
+    "detail": "Write informative headings, descriptions and readable supporting text.",
+    "top_right_header": "Use a relevant phrase or short sentence. Reuse across related scenes where appropriate.",
+    "logo_clearance": "Fit and wrap header text within its allocated area beside the Savvy Asia logo."
+  },
+  "scenes": [
+    {
+      "scene": 1,
+      "target_seconds": 0,
+      "purpose": "What this scene explains",
+      "key_points": ["A fact or idea to communicate"],
+      "narration": "Exact spoken words",
+      "slide_text_guidance": "The message or emphasis for the slide",
+      "top_right_header_guidance": "Subject or section to identify"
+    }
+  ],
+  "closing": {
+    "duration_seconds": 0,
+    "narration": "Exact closing message"
+  }
+}

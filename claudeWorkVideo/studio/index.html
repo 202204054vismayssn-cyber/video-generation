@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Video Studio</title>
+  <link rel="stylesheet" href="./studio.css">
+  <script src="./studio.js" defer></script>
+</head>
+<body>
+  <header class="top"><div class="shell top-inner">
+    <div class="brand"><span aria-hidden="true">▶</span> Video Studio</div>
+    <div class="connection-badge" id="badge">Disconnected</div>
+  </div></header>
+  <main class="shell">
+    <div class="intro"><h1>Create a video</h1><p>Write a brief, add your media, and render with Gemma in Colab.</p></div>
+    <div class="layout">
+      <form id="video-form" class="panel">
+        <div class="panel-heading"><h2>Video setup</h2>
+          <label class="mode"><span class="sr-only">Configuration mode</span><select id="mode"><option value="storyboard" selected>Storyboard</option><option value="brief">Prompt</option></select></label>
+        </div>
+        <div id="brief">
+          <div id="storyboard-panel">
+            <label for="storyboard">Storyboard JSON</label>
+            <p class="hint">Fill in the <a href="./storyboard-template.txt" target="_blank" rel="noopener">storyboard prompt template</a> in ChatGPT, Gemini, or Claude. Paste its JSON response below. Studio reads the storyboard and uses the settings and attachments you choose here.</p>
+            <textarea id="storyboard" rows="7" required spellcheck="false"></textarea>
+            <p class="hint" id="timing-note" role="status"></p>
+          </div>
+          <label for="prompt" id="prompt-label">Video brief</label>
+          <textarea id="prompt" rows="5" maxlength="20000" required placeholder="Describe the topic, audience, and key points to cover…"></textarea>
+          <div class="fields">
+            <label>Duration (seconds)<input id="duration" type="number" min="15" max="600" step="0.1" value="60" required></label>
+            <label>Resolution<select id="resolution"><option>1920×1080</option><option selected>1280×720</option><option>960×540</option></select></label>
+            <label>FPS<select id="fps"><option>20</option><option>24</option><option>25</option><option selected>30</option><option>60</option></select></label>
+          </div>
+          <details class="settings">
+            <summary>Brand and narration</summary>
+            <div class="fields two">
+              <label>Company name<input id="company" maxlength="36" value="Savvy Asia" required></label>
+              <label>Voice<input id="voice" value="en-US-BrianNeural" pattern="[A-Za-z0-9:_\-]+Neural" maxlength="100"></label>
+              <label>Tone<select id="tone"><option value="auto">Auto</option><option value="professional">Professional</option><option value="calm">Calm</option><option value="enthusiastic">Enthusiastic</option><option value="urgent">Urgent</option></select></label>
+            </div>
+            <div class="checks">
+              <label><input id="narration" type="checkbox" checked> Narration</label>
+              <label><input id="closing" type="checkbox" checked> Closing slide</label>
+            </div>
+          </details>
+          <div class="section-heading"><h3>Media attachments</h3><span>Optional</span></div>
+          <p class="hint">Up to 16 files, 80 MiB each and 90 MiB per request.</p>
+          <div id="media" class="media-grid"></div>
+          <div id="scenes"></div>
+          <button type="button" class="secondary" id="add-scene">+ Add scene media</button>
+        </div>
+        <div class="submit-row"><button id="submit" type="submit" disabled>Generate video <span aria-hidden="true">→</span></button><p class="hint" id="submit-note" role="status">Connect to Colab to submit a video.</p></div>
+      </form>
+      <aside>
+        <form id="connection" class="panel">
+          <h2>Colab connection</h2>
+          <p class="hint">Copy both values printed by Cell 6. The token stays in this tab.</p>
+          <label>Cloudflare URL<input id="base" type="url" placeholder="https://your-tunnel.trycloudflare.com" autocomplete="off" required></label>
+          <label for="token">Colab API token</label>
+          <div class="token-row"><input id="token" type="password" autocomplete="off" spellcheck="false" required><button id="show-token" class="secondary" type="button" aria-pressed="false">Show</button></div>
+          <button class="secondary connect" id="connect" type="submit">Connect</button>
+          <p id="connection-note" class="hint" role="status"></p>
+        </form>
+        <section class="panel jobs">
+          <div class="panel-heading"><h2>Render jobs</h2><button class="secondary" type="button" id="refresh" disabled>Refresh</button></div>
+          <p id="jobs-note" class="hint" role="status">Connect to view jobs from this runtime.</p>
+          <label id="job-picker" hidden>Recent jobs<select id="job-list"></select></label>
+          <div id="job" hidden>
+            <div class="job-heading"><strong id="job-state"></strong><span id="job-stage"></span></div>
+            <progress id="progress" max="13" value="0" aria-label="Completed render stages"></progress>
+            <p class="hint" id="stages"></p>
+            <p id="job-error" class="error" role="status"></p>
+            <video id="preview" controls playsinline hidden></video>
+            <div class="toolbar" id="job-actions">
+              <button type="button" class="secondary" data-output="preview" hidden>Load preview</button>
+              <button type="button" class="secondary" data-output="video" hidden>Download MP4</button>
+              <button type="button" class="secondary" data-output="report">Report</button>
+              <button type="button" class="secondary" data-output="log">Log</button>
+            </div>
+            <p id="output-note" class="hint" role="status"></p>
+            <pre id="output" hidden></pre>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>

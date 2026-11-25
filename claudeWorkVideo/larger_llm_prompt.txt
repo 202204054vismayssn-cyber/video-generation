@@ -19,10 +19,13 @@ Subtract closing duration from total duration to obtain main_content_seconds.
 Assign target_seconds to each scene so their sum equals main_content_seconds.
 Start scene numbers at 1. Set scene_count to the actual number of scenes.
 
-Write natural, ready-to-speak narration, initially aiming for about 120–140
-spoken words per minute of main content. Treat this as an estimate. The video
-generator will measure actual audio and can shorten wording or make a small
-speed adjustment to keep the final runtime within ±3 seconds.
+Write natural narration for the topic and audience in the brief. Before returning
+the storyboard, read each scene as spoken and shorten it to fit its target time.
+Remove repetition and simplify sentences while preserving the intent, required
+facts and any wording the brief asks to keep. Use slide text for supporting
+details when appropriate. About two spoken words per second is a drafting guide.
+Aim for the requested total, including the closing. The final rendered video
+has a single tolerance of plus or minus three seconds across the whole video.
 
 For each scene provide a purpose, key_points, exact narration, slide_text_guidance
 and top_right_header_guidance. Gemma will write the final slide heading,
